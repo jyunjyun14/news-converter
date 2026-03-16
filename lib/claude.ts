@@ -1,6 +1,6 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export type ConvertCategory = "무역통상" | "디지털헬스케어" | "의료서비스";
 
@@ -101,16 +101,18 @@ ${content}
 
 위 기사를 시스템 프롬프트에 명시된 형식대로 변환하되, [출처명] 자리에는 "${source}"를, 날짜는 "${publishedDate}"를 사용하세요.`;
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
-    systemInstruction: SYSTEM_PROMPTS[category],
+  const completion = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      { role: "system", content: SYSTEM_PROMPTS[category] },
+      { role: "user", content: userMessage },
+    ],
+    max_tokens: 2048,
   });
 
-  const result = await model.generateContent(userMessage);
-  const text = result.response.text();
-
+  const text = completion.choices[0]?.message?.content;
   if (!text) {
-    throw new Error("Gemini API에서 텍스트 응답을 받지 못했습니다.");
+    throw new Error("Groq API에서 텍스트 응답을 받지 못했습니다.");
   }
 
   return text;
