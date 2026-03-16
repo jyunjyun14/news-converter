@@ -102,7 +102,7 @@ ${content}
 위 기사를 시스템 프롬프트에 명시된 형식대로 변환하되, [출처명] 자리에는 "${source}"를, 날짜는 "${publishedDate}"를 사용하세요.`;
 
   const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
+    model: "gemini-2.0-flash",
     systemInstruction: SYSTEM_PROMPTS[category],
   });
 
