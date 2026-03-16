@@ -1,8 +1,6 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export type ConvertCategory = "무역통상" | "디지털헬스케어" | "의료서비스";
 
@@ -103,22 +101,17 @@ ${content}
 
 위 기사를 시스템 프롬프트에 명시된 형식대로 변환하되, [출처명] 자리에는 "${source}"를, 날짜는 "${publishedDate}"를 사용하세요.`;
 
-  const message = await anthropic.messages.create({
-    model: "claude-opus-4-5",
-    max_tokens: 2048,
-    system: SYSTEM_PROMPTS[category],
-    messages: [
-      {
-        role: "user",
-        content: userMessage,
-      },
-    ],
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
+    systemInstruction: SYSTEM_PROMPTS[category],
   });
 
-  const textContent = message.content.find((c) => c.type === "text");
-  if (!textContent || textContent.type !== "text") {
-    throw new Error("Claude API에서 텍스트 응답을 받지 못했습니다.");
+  const result = await model.generateContent(userMessage);
+  const text = result.response.text();
+
+  if (!text) {
+    throw new Error("Gemini API에서 텍스트 응답을 받지 못했습니다.");
   }
 
-  return textContent.text;
+  return text;
 }
