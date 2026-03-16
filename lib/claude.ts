@@ -28,7 +28,7 @@ Argentina and the U.S. sign reciprocal trade and investment agreement, pushing f
 [Buenos Aires Herald, 2026.02.05.]
 
 [작성 규칙]
-1. 출력은 반드시 한국어로만 작성. 영어는 괄호 안 약어/고유명사에만 허용 (예: 세계무역기구(WTO), 주당순이익(EPS))
+1. 출력은 반드시 한국어로만 작성. 태국어·중국어·러시아어·아랍어 등 한국어·영어 외 모든 외국어 사용 절대 금지. 외국 고유명사는 반드시 "한국어명(영어명 또는 원문)" 형식으로 표기 (예: 세계무역기구(WTO), 드래곤 코파일럿(Dragon Copilot), 칭화창궁병원(北京清华长庚医院))
 2. 첫 줄: 한국어 제목
 3. 둘째 줄: 영어 제목 번역
 4. 빈 줄
@@ -128,5 +128,17 @@ ${content}
     throw new Error("Groq API에서 텍스트 응답을 받지 못했습니다.");
   }
 
-  return text;
+  return sanitizeOutput(text);
+}
+
+// 한국어, 영어, 숫자, 기본 특수문자 외 모든 외국어 문자 제거
+function sanitizeOutput(text: string): string {
+  return text
+    .split('\n')
+    .map(line => {
+      // 한국어(가-힣), 영어(a-zA-Z), 숫자, 공백, 허용 특수문자만 남김
+      // 허용: 한국어, 영어, 숫자, 공백, . , : ; ! ? ( ) [ ] / · % - _ ' " « » … △ ▶ ­ * # @ & + = ~ 등
+      return line.replace(/[^\uAC00-\uD7A3\u1100-\u11FF\u3130-\u318Fa-zA-Z0-9\s\.\,\:\;\!\?\(\)\[\]\/\·\%\-\_\'\"\«\»\…\△\▶\­\*\#\@\&\+\=\~\<\>\{\}\\\|\^`\n\r\t₩$€£¥]/g, '');
+    })
+    .join('\n');
 }
