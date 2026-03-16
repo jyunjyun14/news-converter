@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@layer base {
+  :root {
+    --background: 240 10% 4%;
+    --foreground: 214 32% 91%;
+    --card: 240 10% 8%;
+    --card-foreground: 214 32% 91%;
+    --popover: 240 10% 8%;
+    --popover-foreground: 214 32% 91%;
+    --primary: 263 70% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 10% 8%;
+    --secondary-foreground: 214 32% 91%;
+    --muted: 240 10% 16%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 270 91% 65%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 10% 16%;
+    --input: 240 10% 16%;
+    --ring: 263 70% 50%;
+    --radius: 0.625rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0A0A0F;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #2D2D3D;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #7C3AED;
+  }
+}
+
+@layer components {
+  .glow-border {
+    box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.3);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .glow-border:focus-within {
+    box-shadow: 0 0 0 1px #7C3AED, 0 0 20px rgba(124, 58, 237, 0.2);
+  }
+
+  .glow-button {
+    transition: all 0.2s ease;
+  }
+
+  .glow-button:hover {
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.4), 0 0 40px rgba(124, 58, 237, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .glow-button:active {
+    transform: translateY(0);
+  }
+
+  .card-hover {
+    transition: all 0.2s ease;
+  }
+
+  .card-hover:hover {
+    box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.3), 0 4px 20px rgba(0, 0, 0, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .shimmer-bg {
+    background: linear-gradient(
+      90deg,
+      #12121A 0%,
+      #1E1E2E 50%,
+      #12121A 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  .result-text {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.875rem;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .korean-amount {
+    color: #60A5FA;
+    font-weight: 600;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200;
+    color: #64748B;
+  }
+
+  .sidebar-item:hover {
+    background: rgba(124, 58, 237, 0.1);
+    color: #E2E8F0;
+  }
+
+  .sidebar-item.active {
+    background: rgba(124, 58, 237, 0.15);
+    color: #A855F7;
+    box-shadow: inset 3px 0 0 #7C3AED;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
